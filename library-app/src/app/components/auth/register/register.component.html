@@ -1,0 +1,86 @@
+<section>
+    <form class="lg:p-10 p-6 space-y-3 relative bg-white shadow-xl rounded-md uk-form teacher-reg"
+          [formGroup]="regForm" (ngSubmit)="submitRegForm()">
+
+        <h1 class="lg:text-2xl text-xl font-semibold mb-6">Teacher Registration</h1>
+
+        <div class="text-base"><span class="font-bold text-red-500 text-lg">*</span> - Required Information </div>
+
+        <div>
+            <input required type="text" placeholder="Full Name *"  name="full_name"
+                   class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
+                   formControlName="full_name"
+                   [class.is-invalid]="full_name?.invalid && full_name?.touched">
+
+            <div *ngIf="full_name?.touched && full_name?.invalid">
+                <small class="text-danger" *ngIf="full_name?.errors?.['required']">Full name is required</small>
+                <small class="text-danger" *ngIf="full_name?.errors?.['minlength']">Full name must be at least 3 characters</small>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <input required type="email" placeholder="Email *" name="email"
+                   class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
+                   formControlName="email"
+                   [class.is-invalid]="email?.invalid && email?.touched">
+
+            <div *ngIf="email?.touched && email?.invalid">
+                <small class="text-danger" *ngIf="email?.errors?.['required']">Email is required</small>
+                <small class="text-danger" *ngIf="email?.errors?.['email']">Must be valid email address</small>
+            </div>
+        </div>
+
+        <div class="password-container  mt-3">
+            <input required placeholder="Password (6 to 12 alpha numeric characters) *" name="password"
+                   class="password_field bg-gray-100 h-12 px-3 rounded-md w-full" maxlength="12" minlength="6"
+                   [type]="showPw ? 'text' : 'password'"
+                   formControlName="password"
+                   [class.is-invalid]="password?.invalid && password?.touched">
+            <button type="button" class="pw-toggle" (click)="togglePassword()">
+                <i class="fa fa-eye"></i>
+            </button>
+            <div *ngIf="password?.touched && password?.invalid">
+                <small class="text-danger" *ngIf="password?.errors?.['required']">Password is required</small>
+                <small class="text-danger" *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</small>
+                <small class="text-danger" *ngIf="password?.errors?.['maxlength']">Password must be not more than 12 characters</small>
+            </div>
+        </div>
+
+
+        <div class="password-container  mt-3">
+            <input required placeholder="Confirm Password (6 to 12 alpha numeric characters) *" name="confirm_password"
+                   class="password_field bg-gray-100 h-12 px-3 rounded-md w-full" maxlength="12" minlength="6"
+                   [type]="showConfirmPw ? 'text' : 'password'"
+                   formControlName="confirm_password"
+                   [class.is-invalid]="confirm_password?.invalid && confirm_password?.touched">
+            <button type="button" class="pw-toggle" (click)="toggleConfirmPassword()">
+                <i class="fa fa-eye"></i>
+            </button>
+            <div *ngIf="confirm_password?.touched && confirm_password?.invalid">
+                <small class="text-danger" *ngIf="confirm_password?.errors?.['required']">Confirm password is required</small>
+                <small class="text-danger" *ngIf="confirm_password?.errors?.['minlength']">Confirm password must be at least 6 characters</small>
+                <small class="text-danger" *ngIf="confirm_password?.errors?.['maxlength']">Confirm password must be not more than 12 characters</small>
+                <small class="text-danger" *ngIf="confirm_password?.errors?.['confirmedValidator']">Password and Confirm Password must be match.</small>
+            </div>
+        </div>
+
+
+        <div class="mt-3">
+            <input required type="text" placeholder="Phone" name="phone"
+                   class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
+                   formControlName="phone" maxlength="15">
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-3 mt-3">
+            <div>
+                <button type="submit" class="submit-btn btn bg-blue-600 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"
+                        [disabled]="!regForm.valid">Submit</button>
+            </div>
+            <div>
+                <button type="reset" class="btn bg-red-600 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"
+                        (click)="resetForm($event)">Clear</button>
+            </div>
+        </div>
+
+    </form>
+</section>

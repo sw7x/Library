@@ -1,0 +1,24 @@
+<section>
+    <div class="grid lg:grid-cols-2 gap-3 w-3/4 m-auto">
+        <div>
+            <button (click)="showAuthors()"
+                    class="btn bg-gray-400 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"
+                    [ngClass]="authors_btn_status ? 'active' : ''"
+            >Authors</button>
+        </div>
+        <div>
+            <button (click)="showBooks()"
+                    class="btn bg-gray-400 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"
+                    [ngClass]="books_btn_status ? 'active' : ''"
+            >Books</button>
+        </div>
+
+    </div>
+
+    <div class="min-h-screen-half w-3/4 mx-auto p-5">
+        <router-outlet></router-outlet>
+    </div>
+
+
+</section>
+

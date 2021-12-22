@@ -1,0 +1,58 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+body {
+    font-size: 18px;
+    font-family: 'Open Sans',sans-serif;
+}
+h1 {
+    font-size: 36px;
+    border-bottom: 4px solid black;
+}
+h1, h2 {
+    text-transform: uppercase;
+    display: inline-block;
+    font-weight: 800;
+}
+h2 {
+    font-size: 27px;
+    padding: 14px 0px;
+    /*color: #fffebb;*/
+    border-bottom: 4px solid #fffebb;
+}
+img {
+    display: block;
+    margin: 0 auto;
+    //width: 480px;
+}
+
+div {
+    /*  font-size: 20px;
+      width: 46%;
+      display: inline-block;
+      padding: 2%;*/
+}
+
+li {
+    float: left;
+    width: 50%;
+    height: 96px;
+    outline: 3px solid #222222;
+    text-align: center;
+    line-height: 96px;
+    color: black;
+    background: white;
+}
+
+section {
+    /*background: #222222;
+    color: white;
+    overflow: auto;*/
+}
+
+
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+

@@ -1,0 +1,59 @@
+<section>
+    <form [formGroup]="addBookForm" (ngSubmit)="submit()"
+          class="lg:p-10 p-6 space-y-3 relative bg-white shadow-xl rounded-md">
+
+        <h1 class="lg:text-2xl text-xl font-semibold mb-6"> Add Book </h1>
+
+        <div class="text-base"><span class="font-bold text-red-500 text-lg">*</span> - Required Information </div>
+
+        <div>
+            <input type="text" name="book_title" placeholder="Book title *"
+                   [class.is-invalid]="bookTitle?.invalid && bookTitle?.touched"
+                   class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full" formControlName="bookTitle">
+
+            <div *ngIf="bookTitle?.touched && bookTitle?.invalid">
+                <small class="text-danger" *ngIf="bookTitle?.errors?.['required']">Book title is required</small>
+                <small class="text-danger" *ngIf="bookTitle?.errors?.['minlength']">Book title must be at least 3 characters</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <!-- <label for="book_desc">Book description</label> -->
+            <textarea id="book_desc" name="book_desc" cols="40" rows="5" class="form-control bg-gray-100"
+                      placeholder="Book description" formControlName="bookDesc"></textarea>
+        </div>
+
+        <div class="form-group py-3">
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input"
+                           aria-describedby="myInput" formControlName="bookImg"
+                           (change)="onSelectFile($event)" accept="image/*">
+                    <label class="custom-file-label" for="myInput">{{fileToUpload}} </label>
+
+                </div>
+            </div>
+            <div *ngIf="bookImg?.touched && bookImg?.invalid">
+                <small class="text-danger" *ngIf="bookImg?.errors?.['required']">Book Image is required</small>
+            </div>
+        </div>
+
+
+        <img [src]="url" width="200" alt=""> <br/>
+
+
+
+        <div class="grid lg:grid-cols-2 gap-3">
+            <div>
+                <button type="submit" class="btn bg-blue-600 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"
+                        [disabled]="!addBookForm.valid">Submit</button>
+            </div>
+            <div>
+                <button (click)="resetForm($event)" class="btn bg-red-600 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full">Clear</button>
+            </div>
+        </div>
+
+
+        {{addBookForm.value | json}}
+    </form>
+</section>

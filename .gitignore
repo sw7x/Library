@@ -1,0 +1,4 @@
+/api/vendor/
+/.idea/
+/library-app/node_modules/
+/spa-test/
