@@ -63,5 +63,13 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+
+        'check.guest' => \App\Http\Middleware\CheckGuest::class,
+        'check.login' => \App\Http\Middleware\CheckLoginUser::class,
+        'check.admin' => \App\Http\Middleware\CheckIsAdminUser::class,
+        'check.teacher' => \App\Http\Middleware\CheckIsTeacher::class,
+
     ];
 }
