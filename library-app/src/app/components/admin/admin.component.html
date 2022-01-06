@@ -1,5 +1,16 @@
+
+
+
+
 <section>
-    <div class="grid lg:grid-cols-2 gap-3 w-3/4 m-auto">
+    <div class="grid lg:grid-cols-3 gap-3 w-3/4 m-auto">
+        <div>
+            <button (click)="showMyProfile()"
+                    class="btn bg-gray-500 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"
+                    [ngClass]="profile_btn_status ? 'active' : ''"
+            >My profile</button>
+        </div>
+
         <div>
             <button (click)="showAuthors()"
                     class="btn bg-gray-400 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"

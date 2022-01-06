@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
         $admin = [
 
             'full_name'     => 'admin',
-            'email'         => 'admin',
+            'email'         => 'admin@email.com',
             'password'      =>  bcrypt(env('ADMIN_PASS', 'qwerty123')),
             'phone'         => '',
             'role'          => 'admin',

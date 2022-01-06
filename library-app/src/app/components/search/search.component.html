@@ -1,23 +1,58 @@
-<section class="">
-    <div class="main-search-input border-2 border-green-600">
-        <div class="main-search-input-item">
-            <input type="text" placeholder="What are you looking for?" value="">
+<form class="lg:p-10 p-6 space-y-3 relative bg-white shadow-xl rounded-md"
+      [formGroup]="searchForm" (ngSubmit)="submitSearchForm()">
+    <section class="search_books">
+        <p class="text-center text-2xl px-5 py-2 text-green-700 font-semibold">Search Books</p>
+        <div class="main-search-input border-2 border-green-600">
+
+            <div class="main-search-input-item">
+                <input type="text" placeholder="Search books"
+                       formControlName="search_text"
+                       (blur)="onBlur()" (focus)="onFocus()"
+                       [class.is-invalid]="search_text?.invalid && formSubmitAttempt">
+            </div>
+
+            <div class="main-search-input-item">
+                <select class="chosen-select" formControlName="search_type" [(ngModel)]='search_type_select'>
+                    <option value="author">by Authors name</option>
+                    <option value="title">by Title</option>
+                </select>
+            </div>
+            <button type="submit" class="button" >Search</button>
         </div>
 
-        <div class="main-search-input-item">
-            <select data-placeholder="All Categories" class="chosen-select">
-                <option>Authors</option>
-                <option>Books</option>
-            </select>
+        <div *ngIf="formSubmitAttempt==true && formShowErrors==true" class="mt-2 text-center">
+            <small class="text-danger text-base font-semibold" *ngIf="search_text?.errors?.['required']">search text is required</small>
+            <small class="text-danger text-base font-semibold" *ngIf="search_text?.errors?.['minlength']">search text must be at least two characters</small>
         </div>
-        <button class="button">Search</button>
-    </div>
-</section>
+    </section>
+    <p>{{errorMsg}}</p>
+</form>
+
 
 
 <section class="">
     <div class="container bcontent">
 
+        <div class="card mb-5" *ngFor="let book of books">
+            <div class="row no-gutters">
+                <div class="col-md-3">
+                    <a [routerLink]="['/books', book.id]">
+                        <img class="card-img" src="{{book.image}}" alt="">
+                    </a>
+                </div>
+                <div class="col-md-9">
+                    <div class="card-body">
+                        <h2 class="card-title"><a [routerLink]="['/books', book.id]">{{book.title}}</a></h2>
+                        <p class="card-text">{{book.description}}</p>
+                        <p class="card-text">posted : <small class="text-muted">{{book.posted}}</small>
+                        <p class="card-text">Author : <small class="text-muted">{{book.author}}</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--
         <div class="card mb-5">
             <div class="row no-gutters">
                 <div class="col-md-3">
@@ -32,52 +67,15 @@
                 </div>
             </div>
         </div>
-
-        <div class="card mb-5">
-            <div class="row no-gutters">
-                <div class="col-md-3">
-                    <img class="card-img" src="https://picsum.photos/350/350" alt="Suresh Dasari Card">
-                </div>
-                <div class="col-md-9">
-                    <div class="card-body">
-                        <h2 class="card-title">Card title</h2>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <p class="card-text">Author : <small class="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        -->
 
 
-        <div class="card mb-5">
-            <div class="row no-gutters">
-                <div class="col-md-3">
-                    <img class="card-img" src="https://picsum.photos/350/350" alt="Suresh Dasari Card">
-                </div>
-                <div class="col-md-9">
-                    <div class="card-body">
-                        <h2 class="card-title">Card title</h2>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <p class="card-text">Author : <small class="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-5">
-            <div class="row no-gutters">
-                <div class="col-md-3">
-                    <img class="card-img" src="https://picsum.photos/350/350" alt="Suresh Dasari Card">
-                </div>
-                <div class="col-md-9">
-                    <div class="card-body">
-                        <h2 class="card-title">Card title</h2>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <p class="card-text">Author : <small class="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 </section>
+
+
+
+
+
+

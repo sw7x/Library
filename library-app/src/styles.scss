@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import '~ngx-toastr/toastr.css';
 
 body {
     font-size: 18px;
@@ -34,14 +34,14 @@ div {
 }
 
 li {
-    float: left;
-    width: 50%;
-    height: 96px;
-    outline: 3px solid #222222;
-    text-align: center;
-    line-height: 96px;
-    color: black;
-    background: white;
+    //float: left;
+    //width: 50%;
+    //height: 96px;
+    //outline: 3px solid #222222;
+    //text-align: center;
+    //line-height: 96px;
+    //color: black;
+    //background: white;
 }
 
 section {

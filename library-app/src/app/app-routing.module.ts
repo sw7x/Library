@@ -3,25 +3,27 @@ import { RouterModule, Routes } from '@angular/router';
 
 
 
-import {SearchComponent} from "./components/search/search.component";
-import {LoginComponent} from "./components/auth/login/login.component";
-import { RegisterComponent } from './components/auth/register/register.component';
+import {SearchComponent} from "@components/search/search.component";
+import {LoginComponent} from "@components/auth/login/login.component";
+import { RegisterComponent } from '@components/auth/register/register.component';
 
 
 
-import { AddBookComponent } from './components/author/add-book/add-book.component';
-import { AuthorBookListComponent } from './components/author/author-book-list/author-book-list.component';
+import { AddBookComponent } from '@components/author/add-book/add-book.component';
+import { AuthorBookListComponent } from '@components/author/author-book-list/author-book-list.component';
 
 
-import { BookListComponent } from './components/admin/book-list/book-list.component';
-import { AuthorListComponent } from './components/admin/author-list/author-list.component';
+import { BookListComponent } from '@components/admin/book-list/book-list.component';
+import { AuthorListComponent } from '@components/admin/author-list/author-list.component';
 
 
-import {BookComponent} from "./components/book/book.component";
-import {AuthorComponent} from "./components/author/author.component";
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import {AuthorProfileComponent} from "./components/author/author-profile/author-profile.component";
-import {AdminComponent} from "./components/admin/admin.component";
+import {BookComponent} from "@components/book/book.component";
+import {AuthorComponent} from "@components/author/author.component";
+import { PageNotFoundComponent } from '@components/page-not-found/page-not-found.component';
+import {AuthorProfileComponent} from "@components/admin/author-profile/author-profile.component";
+import {AdminComponent} from "@components/admin/admin.component";
+import {MyProfileComponent} from "@components/author/my-profile/my-profile.component";
+import {AdminProfileComponent} from "@components/admin/admin-profile/admin-profile.component";
 
 
 const routes: Routes = [
@@ -44,13 +46,13 @@ const routes: Routes = [
     },
 
     {
-        path:'author-profile',
+        path:'author',
         component: AuthorComponent,
         children: [
-            {path:'my-book-list',component: AuthorBookListComponent},
+            {path:'my-books',component: AuthorBookListComponent},
             {path:'add-book',component: AddBookComponent},
-            {path:'view-profile',component: AuthorProfileComponent},
-            {path:'',redirectTo: 'view-profile',pathMatch:'full'},
+            {path:'my-profile',component: MyProfileComponent},
+            {path:'',redirectTo: 'my-profile',pathMatch:'full'},
         ]
     },
 
@@ -60,7 +62,8 @@ const routes: Routes = [
         children: [
             {path:'authors',component: AuthorListComponent},
             {path:'books',component: BookListComponent},
-            {path:'',redirectTo: 'authors',pathMatch:'full'},
+            {path:'my-profile',component: AdminProfileComponent},
+            {path:'',redirectTo: 'my-profile',pathMatch:'full'},
         ]
     },
 

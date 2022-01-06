@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+    production: true,
+    apiUrl: 'https://lib-api.susanthaonline.xyz/api/v1'
 };

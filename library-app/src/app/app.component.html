@@ -6,20 +6,7 @@
     <a routerLink="">
         <h1>Library</h1>
     </a>
-
-    <nav>
-        <a routerLink="/login" routerLinkActive="active">Login</a>
-        <a routerLink="/register" routerLinkActive="active">Register</a>
-        <a routerLink="/search" routerLinkActive="active">Search</a>
-        <a [routerLink]="['/books', 6]" routerLinkActive="active">book(6)</a>
-
-        <a routerLink="/author-profile" routerLinkActive="active">Author</a>
-        <a routerLink="/author-profile/add-book" routerLinkActive="active">Add book</a>
-        <a routerLink="/author-profile/my-book-list" routerLinkActive="active">My books</a>
-
-        <a routerLink="/admin/authors" routerLinkActive="active">Admin books</a>
-        <a routerLink="/admin/books" routerLinkActive="active">Admin authors</a>
-    </nav>
+    <app-navbar></app-navbar>
 </header>
 
 <router-outlet></router-outlet>

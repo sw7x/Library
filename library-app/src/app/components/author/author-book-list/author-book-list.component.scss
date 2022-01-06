@@ -1,6 +1,11 @@
 .table {
     border-spacing: 0 0.85rem !important;
 }
+.table tr{
+    border: 2px solid #175175;
+}
+
+
 
 .table .dropdown {
     display: inline-block;
@@ -10,20 +15,26 @@
 .table th {
     vertical-align: middle;
     margin-bottom: 10px;
-    border: none;
+
+    border: 2px solid #175175;
 }
 
 .table thead tr,
 .table thead th {
-    border: none;
     font-size: 12px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    background: transparent;
 }
+
+.table th {
+    font-size: 16px !important;
+    background-color:#f66d9b6e
+}
+
 
 .table td {
     background: #fff;
+    font-size: 14px !important;
 }
 
 .table td:first-child {
@@ -150,12 +161,12 @@ div.dataTables_wrapper div.dataTables_filter label {
 }
 
 .table a {
-    color: #212529;
+    //color: #212529;
 }
 
 .table a:hover,
 .table a:focus {
-    text-decoration: none;
+    //text-decoration: none;
 }
 
 table.dataTable {

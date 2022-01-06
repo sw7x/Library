@@ -7,82 +7,40 @@
                 <table id="example" class="table table-hover responsive nowrap" style="width:100%">
                     <thead>
                     <tr>
-                        <th>Client Name</th>
-                        <th>Phone Number</th>
-                        <th>Profession</th>
-                        <th>Date of Birth</th>
-                        <th>App Access</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>registered</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>
-                            <a href="#">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar avatar-blue mr-3">EB</div>
+                        <tr *ngFor="let author of authors | paginate: { itemsPerPage: 5, currentPage: page }">
+                            <td>
+                                <a class="text-blue-700 font-semibold" [routerLink]="['/authors', author.id]">{{author.name}}</a>
+                            </td>
+                            <td>{{author.email}}</td>
+                            <td>{{author.phone}}</td>
+                            <td>{{author.registered}}</td>
+                            <td>
 
-                                    <div class="">
-                                        <p class="font-weight-bold mb-0">Ethan Black</p>
-                                        <p class="text-muted mb-0">ethan-black@example.com</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </td>
-                        <td>(784) 667 8768</td>
-                        <td>Designer</td>
-                        <td>09/04/1996</td>
-                        <td>
-                            <div class="badge badge-success badge-success-alt">Enabled</div>
-                        </td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-icon" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="bx bx-dots-horizontal-rounded" data-toggle="tooltip" data-placement="top"
-                                       title="Actions"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                    <a class="dropdown-item" href="#"><i class="bx bxs-pencil mr-2"></i> Edit Profile</a>
-                                    <a class="dropdown-item text-danger" href="#"><i class="bx bxs-trash mr-2"></i> Remove</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
 
-                    <tr>
-                        <td>
-                            <a href="#">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar avatar-pink mr-3">JR</div>
+                                <ui-switch size="large" (change)="changeStatus($event,author.id)"
+                                           checkedTextColor="blue"
+                                           labelOn="enable" labelOff="disable" [checked]="(author.status=='enabled')?true:false"></ui-switch>
 
-                                    <div class="">
-                                        <p class="font-weight-bold mb-0">Julie Richards</p>
-                                        <p class="text-muted mb-0">julie_89@example.com</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </td>
-                        <td> (937) 874 6878</td>
-                        <td>Investment Banker</td>
-                        <td>13/01/1989</td>
-                        <td>
-                            <div class="badge badge-success badge-success-alt">Enabled</div>
-                        </td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-icon" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="bx bx-dots-horizontal-rounded" data-toggle="tooltip" data-placement="top"
-                                       title="Actions"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                    <a class="dropdown-item" href="#"><i class="bx bxs-pencil mr-2"></i> Edit Profile</a>
-                                    <a class="dropdown-item text-danger" href="#"><i class="bx bxs-trash mr-2"></i> Remove</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+
+
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
+
+                <div class="pagination text-center">
+                    <pagination-controls class="border-2 border-gray-500 mx-auto px-3 py-2 font-semibold text-2xl ngx-pagination" (pageChange)="page = $event"></pagination-controls>
+                </div>
+
+                <p>{{errorMsg}}</p>
             </div>
         </div>
     </div>

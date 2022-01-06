@@ -116,29 +116,36 @@ Route::group(['prefix' => 'v1'], function() {
 
 
 
+    Route::middleware(['CORS'])->group(function () {
 
-    Route::resource('books', BookController::class,[
-        'except' => ['create','edit','update','destroy']
-    ]);
+        Route::resource('books', BookController::class,[
+            'except' => ['create','edit','update','destroy']
+        ]);
 
-    Route::get('authors/{id}/books', [AuthorController::class,'getBooksBelongToAuthor']);
-    Route::resource('authors', AuthorController::class,[
-        'except' => ['create','edit','destroy']
-    ]);
+        Route::get('authors/{id}/books', [AuthorController::class,'getBooksBelongToAuthor']);
+        Route::resource('authors', AuthorController::class,[
+            'except' => ['create','edit','destroy']
+        ]);
 
 
-    Route::group(['as'=>'auth.','namespace' =>'Auth'], function(){
-        Route::post('/login',       [AuthController::class,'login'])->name ('login');
-        Route::delete('/logout',    [AuthController::class,'logout'])->name ('logout');
-        Route::post('/register',    [AuthController::class,'register'])->name ('register');
+        Route::group(['as'=>'auth.','namespace' =>'Auth'], function(){
+            Route::post('/login',       [AuthController::class,'login'])->name ('login');
+            Route::delete('/logout',    [AuthController::class,'logout'])->name ('logout');
+            Route::post('/register',    [AuthController::class,'register'])->name ('register');
+        });
+
+
+
+        Route::get('token-decode', [AuthController::class, 'tokenDecode']);
+        Route::post('login', [AuthController::class, 'login']);
+        Route::post('check', [AuthController::class, 'check']);
+        Route::post('logout', [AuthController::class, 'logout']);
+
+
+
+
     });
 
-
-
-    Route::get('token-decode', [AuthController::class, 'tokenDecode']);
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('check', [AuthController::class, 'check']);
-    Route::post('logout', [AuthController::class, 'logout']);
 
 
 

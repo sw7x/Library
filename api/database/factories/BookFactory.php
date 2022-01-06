@@ -25,7 +25,7 @@ class BookFactory extends Factory
         return [
             'title'         => $bookName,
             'description'   => $this->faker->text(),
-            'image'         => $this->faker->image('public/storage/books',640,480, null, false),
+            'image'         => 'books/'.$this->faker->image('public/storage/books',640,480, null, false),
             //'image'         => $this->faker->image(storage_path('images'),500,400, null, false),
 
 

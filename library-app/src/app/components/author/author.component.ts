@@ -3,6 +3,7 @@ import {ActivatedRoute, Router, RouterModule, Routes, ParamMap} from '@angular/r
 
 
 
+
 @Component({
     selector: 'app-author',
     templateUrl: './author.component.html',
@@ -24,6 +25,10 @@ export class AuthorComponent implements OnInit {
     ngOnInit(): void {
         this.route.paramMap.subscribe((params:ParamMap) => {
             this.authorId = parseInt(<string>params.get('id'));
+            //alert(this.authorId);
+            //alert('AuthorComponent');
+
+
         });
     }
 

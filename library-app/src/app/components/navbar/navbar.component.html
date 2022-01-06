@@ -1,0 +1,45 @@
+<!--<nav class="navbar navbar-light bg-light justify-content-between">
+    <a class="navbar-brand">Navbar</a>
+    <div>
+        <a class="navbar-brand" routerLink="login" *ngIf="!loggedIn">Login</a>
+        <a class="navbar-brand" routerLink="profile" *ngIf="loggedIn">Profile</a>
+    </div>
+
+</nav>-->
+
+
+<nav>
+
+    <a *ngIf="!loggedIn" routerLink="/login" routerLinkActive="active">Login</a>
+    <a *ngIf="!loggedIn" routerLink="/register" routerLinkActive="active">Register</a>
+    <a routerLink="/search" routerLinkActive="active">Search</a>
+
+    <a [routerLink]="['/books', 6]" routerLinkActive="active">book(6)</a>
+    <a [routerLink]="['/books', 7]" routerLinkActive="active">book(7)</a>
+    <a [routerLink]="['/books', 8]" routerLinkActive="active">book(8)</a>
+
+
+
+
+    <a [routerLink]="['/authors', 8]" routerLinkActive="active">Author(8)</a>
+    <a [routerLink]="['/authors', 9]" routerLinkActive="active">Author(9)</a>
+    <a [routerLink]="['/authors', 10]" routerLinkActive="active">Author(10)</a>
+
+    <a *ngIf="loggedIn && userRole=='teacher'" routerLink="/author/my-profile" routerLinkActive="active">my profile(Author)</a>
+    <a *ngIf="loggedIn && userRole=='teacher'" routerLink="/author/add-book" routerLinkActive="active">Add book</a>
+    <a *ngIf="loggedIn && userRole=='teacher'" routerLink="/author/my-books" routerLinkActive="active">My books</a>
+
+
+
+    <a *ngIf="loggedIn && userRole=='admin'" routerLink="/admin/my-profile" routerLinkActive="active">my profile(Author)</a>
+    <a *ngIf="loggedIn && userRole=='admin'" routerLink="/admin/authors" routerLinkActive="active">Admin books</a>
+    <a *ngIf="loggedIn && userRole=='admin'" routerLink="/admin/books" routerLinkActive="active">Admin authors</a>
+
+
+
+
+    <a class="navbar-brand" href="#" (click)="logout($event)" *ngIf="loggedIn">Logout</a>
+
+    <a class="navbar-brand" routerLink="profile" *ngIf="loggedIn">--Profile</a>
+
+</nav>

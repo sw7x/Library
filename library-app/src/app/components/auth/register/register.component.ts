@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { ConfirmedValidator } from './confirmed.validator';
-
+import {RegistrationService} from "@services/registration.service";
 
 @Component({
     selector: 'app-register',
@@ -9,12 +9,14 @@ import { ConfirmedValidator } from './confirmed.validator';
     styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-    showPw: boolean = false;
-    showConfirmPw: boolean = false;
+    public showPw           : boolean = false;
+    public showConfirmPw    : boolean = false;
+    public regForm!         : FormGroup;
+    public errorMsg         : string | undefined;
 
-    regForm! : FormGroup;
+    constructor(private fb:FormBuilder, private _registrationService:RegistrationService ) {
 
-    constructor(private fb:FormBuilder) { }
+    }
 
 
 
@@ -60,12 +62,52 @@ export class RegisterComponent implements OnInit {
     togglePassword(){
         this.showPw = !this.showPw;
     }
-
     toggleConfirmPassword(){
         this.showConfirmPw = !this.showConfirmPw;
     }
 
+
     submitRegForm(){
+        console.log(this.regForm.value);
+        console.log(this.regForm.value.email);
+
+        /*const formData = new FormData();
+
+        formData.append('full_name', this.regForm.value.full_name);
+        formData.append('email', this.regForm.value.email);
+        formData.append('password', this.regForm.value.password);
+        formData.append('confirm_password', this.regForm.value.confirm_password);
+        formData.append('phone', this.regForm.value.phone);*/
+
+
+        const formData = new FormData();
+        Object.entries(this.regForm.value).forEach(
+            ([key, value]: any[]) => {
+                formData.set(key, value);
+            }
+        );
+
+
+
+
+        console.log(formData);
+        // @ts-ignore
+        for (let [key, value] of formData) {
+            console.log(`${key}: ${value}`)
+        }
+
+
+        this._registrationService.addUser(formData)
+            .subscribe(
+                (response: any) => console.log("Success",response),
+                (error: any) => {
+                    console.log("Error",error);
+                    this.errorMsg = error
+                },
+            );
+
+
+
 
     }
 

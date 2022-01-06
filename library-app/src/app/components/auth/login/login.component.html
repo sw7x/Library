@@ -11,6 +11,7 @@
             <input type="text" name="email" placeholder="Email *"
                    class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
                    formControlName="email"
+                   [(ngModel)]="form.email"
                    [class.is-invalid]="email?.invalid && email?.touched">
 
             <div *ngIf="email?.touched && email?.invalid">
@@ -27,7 +28,9 @@
             <input required placeholder="Password (6 to 12 alpha numeric characters) *" name="password"
                    class="password_field bg-gray-100 h-12 px-3 rounded-md w-full" maxlength="12" minlength="6"
                    [type]="show ? 'text' : 'password'" formControlName="password"
-                   [class.is-invalid]="password?.invalid && password?.touched">
+                   [class.is-invalid]="password?.invalid && password?.touched"
+                   [(ngModel)]="form.password"
+            >
             <button type="button" id="btnToggle" class="pw-toggle" (click)="togglePassword()">
                 <i id="eyeIcon" class="fa fa-eye"></i>
             </button>
@@ -57,7 +60,7 @@
         </div>
 
 
-
+        <p>{{errorMsg}}</p>
 
 
 
