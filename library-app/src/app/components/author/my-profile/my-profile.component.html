@@ -1,17 +1,26 @@
 <section class="my-5">
     <div class="container bcontent">
-        <div class="card">
-            <h2 class="px-3 card-title text-center">Author profile</h2>
-            <div class="card-horizontal">
-                <div class="card-body">
-                    <h3 class="card-title">Name - {{authorId}}</h3>
-                    <p class="card-text mb-2">Email - {{email}}</p>
-                    <p class="card-text mb-2">Phone - {{phone}}</p>
+
+        <ng-template [ngIf]="status==='success'" [ngIfElse]="errorMsgTpl">
+            <div class="card">
+                <h2 class="px-3 card-title text-center">Author profile</h2>
+                <div class="card-horizontal">
+                    <div class="card-body">
+                        <h3 *ngIf="name" class="card-title">Name - {{name}}</h3>
+                        <p *ngIf="email" class="card-text mb-2">Email - {{email}}</p>
+                        <p *ngIf="phone" class="card-text mb-2">Phone - {{phone}}</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small *ngIf="registered" class="text-muted font-semibold">Registered - {{registered}}</small>
                 </div>
             </div>
-            <div class="card-footer">
-                <small class="text-muted font-semibold">Registered - {{registered}}</small>
-            </div>
-        </div>
+        </ng-template>
+
+        <ng-template #errorMsgTpl>
+            <p class="text-danger text-center text-3xl font-semibold">Error</p>
+            <p class="text-danger text-center text-2xl font-semibold">{{message}}</p>
+        </ng-template>
+
     </div>
 </section>

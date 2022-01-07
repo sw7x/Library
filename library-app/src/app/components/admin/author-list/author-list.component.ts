@@ -12,15 +12,15 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AuthorListComponent implements OnInit {
     //public authors:Array<any> | undefined;
-    public authors: any[] = [];
-    public totalRecords:number | undefined;
-    public page:number = 1;
+    public authors      : any[] = [];
+    public totalRecords : number = 0;
+    public page:number  = 1;
 
 
 
-    public status      : string | undefined;
-    public message     : string | undefined;
-    public errorMsg    : string | undefined;
+    public status      : string = '';
+    public message     : string = '';
+
 
 
 
@@ -29,11 +29,8 @@ export class AuthorListComponent implements OnInit {
 
 
     changeStatus(event: any, authorId: any){
-        console.log(authorId);
-        console.log(event);
-        //this.toastr.info('Hello world!', 'Toastr fun!');
-        //this.toastr.success('Hello world!');
-
+        //console.log(authorId);
+        //console.log(event);
 
         let statVal = (event==true)?'1':'0';
 
@@ -49,7 +46,7 @@ export class AuthorListComponent implements OnInit {
             },
             (error: any) => {
                 this.toastr.error(error);
-                console.log("Error",error);
+                //console.log("Error",error);
                 //this.errorMsg = error
             },
         );
@@ -59,40 +56,25 @@ export class AuthorListComponent implements OnInit {
 
     ngOnInit(): void {
 
-
-
-
         this._authorService.getAllAuthors()
             .subscribe((response: any) => {
-                    console.log(response);
-                    console.log(response.message);
-                    console.log(response.data);
-
-
-
+                    //console.log(response);
+                    //console.log(response.message);
+                    //console.log(response.data);
 
                     if(response.status === 'success'){
                         this.authors      = response.data;
                         this.totalRecords = response.data.length;
-
-
-
-                    }else{
-
                     }
-
 
                     this.status      = response.status;
                     this.message     = response.message;
 
-
-
-
-
-
-
                 },
-                error => this.errorMsg = error
+                error => {
+                    this.message = error;
+                    this.status   = 'error';
+                }
             );
     }
 

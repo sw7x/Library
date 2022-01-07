@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "@services/auth.service";
 import {TokenService} from "@services/token.service";
 import {Router} from "@angular/router";
+import {UserDataService} from "@services/user-data.service";
 
 @Component({
     selector: 'app-login',
@@ -12,15 +13,21 @@ import {Router} from "@angular/router";
 export class LoginComponent implements OnInit {
     show: boolean = false;
     loginForm! : FormGroup;
-    public errorMsg    : string | undefined;
+
     public form = {
         email: null,
         password: null
     };
 
+
+    public status      : string = '';
+    public message     : string = '';
+
+
     constructor(private fb:FormBuilder,
                 private auth:AuthService,
                 private _tokenService: TokenService,
+                private _userDataService: UserDataService,
                 private _router: Router
                 ) {
 
@@ -51,7 +58,7 @@ export class LoginComponent implements OnInit {
         this.show = !this.show;
     }
 
-    //this._tokenService.handle(response.access_token)
+
 
     submitLoginForm(){
         if(this.loginForm.valid){
@@ -59,11 +66,12 @@ export class LoginComponent implements OnInit {
             .subscribe(
                 (response: any) => {
                     if(response.status == 'success'){
-                        alert('success - ' + response.message);
 
-                        this._tokenService.handle(response.access_token,response.userData);
-                        let userRole = this._tokenService.getUserRole();
-                        console.log(this._tokenService.getUserRole());
+                        this._tokenService.handle(response.access_token);
+                        this._userDataService.handle(response.userData);
+
+                        let userRole = this._userDataService.getUserRole();
+                        //console.log(this._userDataService.getUserRole());
 
                         if(userRole == 'teacher'){
                             this._router.navigateByUrl('/author/my-profile');
@@ -73,23 +81,17 @@ export class LoginComponent implements OnInit {
                             this._router.navigateByUrl('/search');
                         }
 
-
-
-                        this._router.navigateByUrl('/author-profile/add-book');
-                        this.auth.changeAuthStatus(true,response.userData.role);
-                        //this.auth.changeAuthStatus(response.userData);
-
-
-                    }else{
-                        alert('failed - ' + response.message);
+                        this.auth.changeAuthStatus(true,response.userData.role,response.userData.email);
                     }
 
-                    console.log("Success",response)
+                    this.status      = response.status;
+                    this.message     = response.message;
+                    //console.log("Success",response)
                 },
                 (error: any) => {
-                    console.log("Error",error);
-                    alert('failed - ' + error);
-                    this.errorMsg = error
+                    //console.log("Error",error);
+                    this.message = error;
+                    this.status   = 'error';
                 },
             );
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\CustomException;
+use App\Models\User;
 use App\Services\AuthService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -57,22 +58,28 @@ class AuthController extends Controller
         }
 
 
-
-
-        $token = $this->guard()->attempt($credentials);
-
-        if ($token) {
+        $user = User::where('email', $credentials['email'])->first();
+        
+        if($user === null || $user->status != 1) {
+            
             return response()->json([
-                'token' => $token,
-                "token_type"=> "bearer",
-                "expires_in"=> $this->guard()->factory()->getTTL() * 60,
-                'status' => 'Success',
-                'message' => 'login successful'],
-                200
-            );
-        } else {
-            return response()->json(['status' => 'Error','message' => 'Invalid credentials.'], 401);
+                'status' => 'error',
+                'message' => 'Your account is disabled.'
+            ], 409);
+
+        }else{
+
+            $token = $this->guard()->attempt($credentials);
+            if ($token) {
+                return $this->respondWithToken($token);                
+            } else {
+                return response()->json([
+                    'status'    => 'failed',
+                    'message'   => 'Invalid credentials.'
+                ], 401);
+            }
         }
+
     }
 
     //todo ???
@@ -145,11 +152,21 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        
+        $loginUser = $this->guard()->user();
+
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 60
-        ]);
+            'access_token'  => $token,
+            'token_type'    => 'bearer',
+            'expires_in'    => $this->guard()->factory()->getTTL() * 60,
+            'status'        => 'success',
+            'message'       => 'login successful',
+            'userData'      => [
+                'id'    =>  $loginUser->id,
+                'email' =>  $loginUser->email,
+                'role'  =>  $loginUser->role,
+            ]
+        ],200);
     }
 
 

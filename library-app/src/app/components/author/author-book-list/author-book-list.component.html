@@ -2,40 +2,56 @@
     <div class="container">
         <div class="row py-5">
             <div class="col-12">
-                <h1 class="lg:text-2xl text-xl font-semibold mb-6">Book List</h1>
-                <table class="table table-hover responsive nowrap" style="width:100%">
-                    <thead>
-                    <tr>
-                        <th width="15%">Title</th>
-                        <th width="40%">Description</th>
-                        <th width="15%">Image</th>
-                        <th width="15%">Author</th>
-                        <th width="15%">posted</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let book of books| paginate: { itemsPerPage: 5, currentPage: page }">
-                        <td>
-                            <a class="text-blue-700  font-semibold" [routerLink]="['/books', book.id]">{{book.title}}</a>
-                        </td>
-                        <td>{{ (book.description.length>30)? (book.description | slice:0:30)+'..':(book.description) }}</td>
-                        <td>
-                            <div *ngIf="book.image != ''">
-                                <img src="{{book.image}}" width="100" alt>
-                            </div>
-                            <div *ngIf="book.image == ''" class="text-danger text-center font-semibold">
-                                no image
-                            </div>
-                        </td>
-                        <td>{{book.author}}</td>
-                        <td>{{book.posted}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="pagination text-center">
-                    <pagination-controls class="border-2 border-gray-500 mx-auto px-3 py-2 font-semibold text-2xl ngx-pagination" (pageChange)="page = $event"></pagination-controls>
-                </div>
-                <p>{{errorMsg}}</p>
+
+                <ng-template [ngIf]="status==='success'" [ngIfElse]="errorMsgTpl">
+                    <h1 class="lg:text-2xl text-xl font-semibold mb-6">Book List</h1>
+                    <div *ngIf="totalRecords > 0">
+                        <table class="table table-hover responsive nowrap" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th width="15%">Title</th>
+                                <th width="40%">Description</th>
+                                <th width="15%">Image</th>
+                                <th width="15%">Author</th>
+                                <th width="15%">posted</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let book of books| paginate: { itemsPerPage: 5, currentPage: page }">
+                                <td>
+                                    <a class="text-blue-700  font-semibold" [routerLink]="['/books', book.id]">{{book.title}}</a>
+                                </td>
+                                <td>{{ (book.description.length>30)? (book.description | slice:0:30)+'..':(book.description) }}</td>
+                                <td>
+                                    <div *ngIf="book.image != ''">
+                                        <img src="{{book.image}}" width="100" alt>
+                                    </div>
+                                    <div *ngIf="book.image == ''" class="text-danger text-center font-semibold">
+                                        no image
+                                    </div>
+                                </td>
+                                <td>{{book.author}}</td>
+                                <td>{{book.posted}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="pagination text-center">
+                            <pagination-controls class="border-2 border-gray-500 mx-auto px-3 py-2 font-semibold text-2xl ngx-pagination" (pageChange)="page = $event"></pagination-controls>
+                        </div>
+                    </div>
+
+                    <div *ngIf="totalRecords <= 0">
+                        <p class="text-danger text-center text-3xl font-semibold">No records</p>
+                    </div>
+                </ng-template>
+
+                <ng-template #errorMsgTpl>
+                    <div>
+                        <p class="text-danger text-center text-3xl font-semibold">Error</p>
+                        <p class="text-danger text-center text-2xl font-semibold">{{message}}</p>
+                    </div>
+                </ng-template>
+
             </div>
         </div>
     </div>

@@ -19,18 +19,7 @@ export class SearchService {
             .pipe(catchError(this.errorHandler));
     }
 
-
-    /*getBooksByAuthorName(authorName: string):Observable<IBooks> {
-        return this.http.get<IBooks>(environment.apiUrl + '/books?author='+authorName)
-            .pipe(catchError(this.errorHandler));
-    }*/
-
-
-
-
-
-
     errorHandler(error: HttpErrorResponse) {
-        return throwError(error.message || "Server error");
+        return throwError(error || "Server error");
     }
 }

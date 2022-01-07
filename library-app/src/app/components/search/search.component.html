@@ -25,54 +25,52 @@
             <small class="text-danger text-base font-semibold" *ngIf="search_text?.errors?.['minlength']">search text must be at least two characters</small>
         </div>
     </section>
-    <p>{{errorMsg}}</p>
+
+    <section class="">
+        <div class="container bcontent">
+
+            <div *ngIf="status == 'success'">
+
+                <ng-template [ngIf]="books.length <= 0" [ngIfElse]="bookListTpl">
+                    <div>
+                        <p class="text-danger text-center text-3xl font-semibold">No records</p>
+                    </div>
+                </ng-template>
+
+                <ng-template #bookListTpl>
+                    <div class="card mb-5" *ngFor="let book of books">
+                        <div class="row no-gutters">
+                            <div class="col-md-3">
+                                <a [routerLink]="['/books', book.id]">
+                                    <img class="card-img" src="{{book.image}}" alt="">
+                                </a>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <h2 class="card-title"><a [routerLink]="['/books', book.id]">{{book.title}}</a></h2>
+                                    <p class="card-text">{{book.description}}</p>
+                                    <p class="card-text">posted : <small class="text-muted">{{book.posted}}</small>
+                                    <p class="card-text">Author : <small class="text-muted">{{book.author}}</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+            </div>
+
+            <div *ngIf="status == 'error'">
+                <p class="text-danger text-center text-3xl font-semibold">Error</p>
+                <p class="text-danger text-center text-2xl font-semibold">{{message}}</p>
+            </div>
+
+        </div>
+    </section>
 </form>
 
 
 
-<section class="">
-    <div class="container bcontent">
 
-        <div class="card mb-5" *ngFor="let book of books">
-            <div class="row no-gutters">
-                <div class="col-md-3">
-                    <a [routerLink]="['/books', book.id]">
-                        <img class="card-img" src="{{book.image}}" alt="">
-                    </a>
-                </div>
-                <div class="col-md-9">
-                    <div class="card-body">
-                        <h2 class="card-title"><a [routerLink]="['/books', book.id]">{{book.title}}</a></h2>
-                        <p class="card-text">{{book.description}}</p>
-                        <p class="card-text">posted : <small class="text-muted">{{book.posted}}</small>
-                        <p class="card-text">Author : <small class="text-muted">{{book.author}}</small></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!--
-        <div class="card mb-5">
-            <div class="row no-gutters">
-                <div class="col-md-3">
-                    <img class="card-img" src="https://picsum.photos/350/350" alt="Suresh Dasari Card">
-                </div>
-                <div class="col-md-9">
-                    <div class="card-body">
-                        <h2 class="card-title">Card title</h2>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <p class="card-text">Author : <small class="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
-
-
-
-    </div>
-</section>
 
 
 

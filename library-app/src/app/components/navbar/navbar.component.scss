@@ -3,8 +3,16 @@ nav {
     float: right;
 }
 nav a {
+    color: #1446b7;
+    margin: 13px 15px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+
+nav a:hover {
     text-decoration: none;
-    color: black;
+    color: #195ffd;
     margin: 13px 15px;
     display: inline-block;
     font-weight: bold;

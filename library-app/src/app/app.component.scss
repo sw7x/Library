@@ -1,3 +1,8 @@
+html,
+body {
+    height: 100%;
+}
+
 ul {
     list-style:none;
     margin: 0px;
@@ -13,3 +18,8 @@ header{
     height: 100px;
 }
 
+.page-content{
+    background: #fff;
+    min-height: 80vh;
+
+}

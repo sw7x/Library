@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {AuthorService} from "@services/author.service";
-import {IAuthor} from "@interfaces/Author";
+import {UserDataService} from "@services/user-data.service";
 
 
 @Component({
@@ -20,130 +19,46 @@ export class MyProfileComponent implements OnInit {
     public phone        : string | undefined;
     public registered   : string | undefined;
 
-
-    public status      : string | undefined;
-    public message     : string | undefined;
-    public errorMsg    : string | undefined;
+    public status      : string = '';
+    public message     : string = '';
 
 
 
-
-    constructor(private route: ActivatedRoute,
-                private router: Router,
-                private _authorService:AuthorService) {
-
-
-
+    constructor(private _authorService:AuthorService,
+                private _userDataService: UserDataService,) {
     }
 
     ngOnInit(): void {
 
+        let userId = this._userDataService.getUserId();
 
-        //todo get userid
-        this._authorService.getAuthorById(13)
-            .subscribe((response: any) => {
-                    console.log(response);
-                    console.log(response.message);
-                    console.log(response.data);
-
-
-
-
-                    if(response.status === 'success'){
-
-
-
-                        this.name       = response.data.name;
-                        this.email      = response.data.email;
-                        this.phone      = response.data.phone;
-                        this.registered = response.data.registered;
-                        this.authorId   = response.data.id;
-
-
-
-
-
-                    }else{
-
-                    }
-
-
-                    this.status      = response.status;
-                    this.message     = response.message;
-
-
-
-
-
-
-
-                },
-                error => this.errorMsg = error
-            );
-
-
-
-
-
-
-
-        /*this.route.paramMap.subscribe((params:ParamMap) => {
-            this.bookId = parseInt(<string>params.get('id'));
-            //alert(this.bookId);
-
-            //if bookId nan throw error
-
-
-            this._bookService.getBookById(this.bookId)
+        if (Number.isInteger(Number(userId))) {
+            this._authorService.getAuthorById(userId)
                 .subscribe((response: any) => {
-                        console.log(response);
-                        console.log(response.message);
-
-
-
 
                         if(response.status === 'success'){
-                            this.bookId      = response.data.id;
-                            this.title       = response.data.title;
-                            this.description = response.data.description;
-                            this.image       = response.data.image;
-                            this.author      = response.data.author;
-                            this.posted      = response.data.posted;
-
-
-                        }else{
-
+                            this.name       = response.data.name;
+                            this.email      = response.data.email;
+                            this.phone      = response.data.phone;
+                            this.registered = response.data.registered;
+                            this.authorId   = response.data.id;
                         }
-
 
                         this.status      = response.status;
                         this.message     = response.message;
-
-
-
-
-
-
-
                     },
-                    error => this.errorMsg = error
+                    (error: any) => {
+                        //console.log("Error",error);
+                        this.message = error;
+                        this.status   = 'error';
+                    },
                 );
-
-
-
-        });*/
-
-
-
-
-
-
-
-
-
+        }else{
+            this.message       = 'Cant Identify user Id';
+            this.status        = 'error';
+        }
 
     }
-
 }
 
 

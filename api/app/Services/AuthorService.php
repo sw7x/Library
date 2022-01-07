@@ -100,7 +100,7 @@ class AuthorService
                 $updatedRecord = $result['updatedRecord'];
                 $accountStatus = ($updatedRecord->status==true)?'enabled':'disabled';
 
-                return array([
+                return array(
                     'id'            => $updatedRecord->id,
                     'name'          => $updatedRecord->full_name,
                     'email'         => $updatedRecord->email,
@@ -108,7 +108,7 @@ class AuthorService
                     'role'          => $updatedRecord->role,
                     'status'        => $accountStatus,
                     'registered'    => $updatedRecord->created_at->diffForHumans()
-                ]);
+                );
             }else{
                 throw new \PDOException('Failed to insert into database',500);
             }

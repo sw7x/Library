@@ -13,12 +13,14 @@ import {SearchService} from "@services/search.service";
 export class SearchComponent implements OnInit {
     public show: boolean = false;
     searchForm! : FormGroup;
-    public errorMsg    : string | undefined;
+
     public search_type_select:string = "title";
     public formSubmitAttempt: boolean = false;
     public formShowErrors: boolean = false;
-    public books:Array<any> | undefined;
+    public books:Array<any> = [];
 
+    public status      : string = '';
+    public message     : string = '';
 
 
 
@@ -35,12 +37,7 @@ export class SearchComponent implements OnInit {
         return this.searchForm.get('search_text');
     }
 
-    /*isFieldValid(field: string) {
-        return (
-            this.testForm.get(field).errors && this.testForm.get(field).touched ||
-            this.testForm.get(field).untouched && this.formSubmitted && this.testForm.get(field).errors
-        );
-    }*/
+
 
     onBlur(){
         this.formSubmitAttempt = false;
@@ -53,75 +50,43 @@ export class SearchComponent implements OnInit {
     }
 
     submitSearchForm(){
-        this.formSubmitAttempt = true;
-        this.formShowErrors = true;
+        this.formSubmitAttempt  = true;
+        this.formShowErrors     = true;
         //this.searchForm.controls['search_text'].markAsTouched();
 
-        console.log(this.searchForm.value);
 
 
         if(this.searchForm.valid){
-            console.log("valid");
+            //console.log("valid");
             let search_text     = this.searchForm.value.search_text;
             let search_type    = this.searchForm.value.search_type;
-
-
-
-
-
 
             this._searchService.getBooksByparam(search_type,search_text)
                 .subscribe(
                     (response: any) => {
                         if(response.status == 'success'){
-                            //alert('success - ' + response.message);
-
-                            this.books = response.data;
-
-
-                        }else{
-                            alert('failed - ' + response.message);
+                            this.books      = response.data;
                         }
-
-                        console.log("Success",response)
+                        this.status      = response.status;
+                        this.message     = response.message;
+                        //console.log("Success",response)
                     },
                     (error: any) => {
-                        console.log("Error",error);
-                        alert('failed - ' + error);
-                        this.errorMsg = error
-                    },
-                );
+                        //console.log("Error - ",error);
 
-
-
-
-
-
-
-
-
-
-
-/*
-            this.auth.login(this.loginForm.value)
-                .subscribe(
-                    (response: any) => {
-                        if(response.status == 'success'){
-                            alert('success - ' + response.message);
+                        if(error.error.status == 'success'){
+                            this.message = error.error.message;
+                            this.status   = 'success';
+                            this.books   = error.error.data;
                         }else{
-                            alert('failed - ' + response.message);
-                        }
+                            this.message = "Server error";
+                            this.status   = 'error';
 
-                        console.log("Success",response)
-                    },
-                    (error: any) => {
-                        console.log("Error",error);
-                        alert('failed - ' + error);
-                        this.errorMsg = error
+                        }
                     },
                 );
-*/
         }
+
     }
 
 }

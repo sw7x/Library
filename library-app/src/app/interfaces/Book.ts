@@ -17,14 +17,7 @@ export interface IBooks {
 }
 
 
-/*
-export interface IBook {
 
-    status: string,
-    [data: string]: BookData,
-    message: string
-}
-*/
 
 
 

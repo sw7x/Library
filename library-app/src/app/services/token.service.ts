@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {environment} from "@environments/environment";
-import {IAuthor} from "@interfaces/Author";
 
 
 @Injectable({
@@ -10,44 +9,34 @@ export class TokenService {
 
     constructor() { }
 
-
-
-
     private iss = {
-        //login0  : 'http://localhost:8000/api/login',
-        login   : environment.apiUrl + '/login',
-        //signup  : 'http://localhost:8000/api/signup'
-        reg  :  environment.apiUrl + '/register',
+       login   : environment.apiUrl + '/login',
+        //reg  :  environment.apiUrl + '/register',
     };
 
-
-
-    handle(token: string,userData:object) {
-        this.set(token,userData);
+    handle(token: string) {
+        this.setToken(token);        
         //console.log(this.payload(token));
         //console.log(userData);
     }
 
-    set(token: string,userData:object) {
+    setToken(token: string) {
         localStorage.setItem('token', token);
-        localStorage.setItem('userData', JSON.stringify(userData));
     }
 
-    get() {
+    getToken() {
         return localStorage.getItem('token');
     }
 
     remove() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('userData');
+        localStorage.removeItem('token');        
     }
 
-    isValid() {
-        const token = this.get();
+    loggedIn() {
+        const token = this.getToken();
         if (token) {
             const payload = this.payload(token);
             //check if payload iss url equals to /login or /register
-            //todo ???
             if (payload) {
                 return Object.values(this.iss).indexOf(payload.iss) > -1 ? true : false;
             }
@@ -63,21 +52,5 @@ export class TokenService {
     decode(payload: string) {
         return JSON.parse(atob(payload));
     }
-
-    loggedIn() {
-        return this.isValid();
-    }
-
-    getUserRole(){
-
-        let UserData = JSON.parse(<string>localStorage.getItem('userData'));
-        //console.log(UserData?.role);
-        //console.log("====UserData");
-        return UserData?.role;
-    }
-
-
-
-
-
+  
 }

@@ -17,16 +17,10 @@ class AuthorController extends Controller
     {
         $this->authorService = $authorService;
 
-        /**/
-        $this->middleware('check.admin',
-            ['only' => ['update','index']]
-        );
-
-        $this->middleware('check.teacher',
-            ['only' => ['getBooksBelongToAuthor','store']]
-        );
-
-
+        $this->middleware('check.admin',['only' => ['update','index']]);
+        $this->middleware('check.teacher',['only' => ['getBooksBelongToAuthor']]);
+        $this->middleware('check.guest',['only' => ['store']]);
+        
     }
 
 
@@ -51,7 +45,7 @@ class AuthorController extends Controller
 
         }catch(\Exception $exception){
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => 'server error',
             );
             return response()->json($response, 500);
@@ -81,16 +75,16 @@ class AuthorController extends Controller
             $insertedRecord = $this->authorService->add($authorRecord);
 
             $response = array(
-                'status'    => 'Success',
+                'status'    => 'success',
                 'data'      => $insertedRecord,
-                'message'   => 'category added successfully'
+                'message'   => 'User Registered successfully'
             );
             return response()->json($response, 201);
 
         }catch (CustomException $e) {
 
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => $e->getMessage(),
             );
             $code = $e->getCode() ?? 500;
@@ -101,7 +95,7 @@ class AuthorController extends Controller
             $message    = $exception->getMessage();
             //$message = 'server error';
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => $message,
             );
             return response()->json($response, 500);
@@ -121,14 +115,14 @@ class AuthorController extends Controller
             $author = $this->authorService->view($id);
             if($author){
                 $response = array(
-                    'status'    => 'Success',
+                    'status'    => 'success',
                     'data'      => $author,
                     'message'   => ''
                 );
                 return response()->json($response, 200);
             }else{
                 $response = array(
-                    'status'    => 'Error',
+                    'status'    => 'error',
                     'data'      => null,
                     'message'   => 'Resource does not exist'
                 );
@@ -138,7 +132,7 @@ class AuthorController extends Controller
         }catch (CustomException $e) {
 
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => $e->getMessage(),
             );
             $code = $e->getCode() ?? 500;
@@ -147,7 +141,7 @@ class AuthorController extends Controller
         catch (\Exception $e) {
 
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 //'message'   => 'Internal server error',
                 'message'   => $e->getMessage(),
             );
@@ -159,8 +153,7 @@ class AuthorController extends Controller
 
 
     public function update(Request $request, $id)
-    {
-
+    {        
         try{
             if(is_numeric ($id)){
                 $id = intval($id);
@@ -187,7 +180,7 @@ class AuthorController extends Controller
             $updatedRecord = $this->authorService->update($userDetailsArr,$id);
 
             $response = array(
-                'status'    => 'Success',
+                'status'    => 'success',
                 'data'      => $updatedRecord,
                 'message'   => 'User updated successfully'
             );
@@ -197,14 +190,14 @@ class AuthorController extends Controller
         }catch(CustomException $exception){
 
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => $exception->getMessage(),
             );
             return response()->json($response, $exception->getCode());
         }catch(\Exception $exception){
 
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 //'message'   => 'Internal server error',
                 'message'   => $exception->getMessage(),
             );
@@ -226,7 +219,7 @@ class AuthorController extends Controller
             $booksData = $this->authorService->booksBelongToAuthor($id);
 
             $response = array(
-                'status'    => 'Success',
+                'status'    => 'success',
                 'message'   => '',
                 'data'      => $booksData,
             );
@@ -235,7 +228,7 @@ class AuthorController extends Controller
         }catch (CustomException $e) {
 
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => $e->getMessage(),
                 'data'      => [],
             );
@@ -243,7 +236,7 @@ class AuthorController extends Controller
         }catch (\Exception $e) {
 
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'data'      => [],
                 //'message'   => 'Internal server error',
                 'message'   => $e->getMessage(),

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {BookService} from "@services/book.service";
+import {UserDataService} from "@services/user-data.service";
 
 
 
@@ -10,26 +11,19 @@ import {BookService} from "@services/book.service";
     styleUrls: ['./add-book.component.scss']
 })
 export class AddBookComponent implements OnInit {
-    //imageSrc: string | ArrayBuffer | null | undefined;
-    addBookForm! : FormGroup;
-    fileToUpload: string = 'Choose file';
-    bookImageFile:any;
-    url: string | ArrayBuffer | null = '';
-    public errorMsg    : string | undefined;
 
+    addBookForm!    : FormGroup;
+    fileToUpload    : string = 'Choose file';
+    bookImageFile   : any;
+    url             : string | ArrayBuffer | null = '';
 
-    /*addBookForm = new FormGroup({
-        bookTitle: new FormControl('', [
-            Validators.required,
-            Validators.minLength(3)
-        ]),
-        //bookImg: new FormControl('', [Validators.required]),
-        //fileSource: new FormControl('', [Validators.required])
-    });*/
+    public status      : string = '';
+    public message     : string = '';
 
-
-
-    constructor(private fb:FormBuilder,private _bookService: BookService) {
+    constructor(private fb:FormBuilder,
+                private _bookService: BookService,
+                private _userDataService: UserDataService,
+                ) {
 
     }
 
@@ -47,20 +41,10 @@ export class AddBookComponent implements OnInit {
             bookTitle   :   [null,[Validators.required,Validators.minLength(3)]],
             bookImg     :   [null,Validators.required],
             bookDesc    :   [null],
-            userId      :   [7,Validators.required]
         });
     }
 
-
-
-
-
-
-
     onSelectFile(event:any) {
-        //console.log(event.target.files);
-        //console.log(event.target.files[0]);
-        //console.log(event.target.files[0].name);
 
         if (event.target.files && event.target.files[0]) {
             var reader = new FileReader();
@@ -78,81 +62,60 @@ export class AddBookComponent implements OnInit {
         }
     }
 
-    resetForm(event:any){
+    resetForm(){
         this.addBookForm.reset();
-        this.url = null;
-        this.fileToUpload = 'Choose file';
-        this.bookImageFile   = null;
+        this.url            = null;
+        this.fileToUpload   = 'Choose file';
+        this.bookImageFile  = null;
+
+        this.status         = '';
+        this.message        = '';
     }
 
-
-
-
-
-    /*
-       onFileChange(event: { target: { files: string | any[]; }; }) {
-
-            const reader = new FileReader();
-
-            if(event.target.files && event.target.files.length) {
-                const [file] = event.target.files;
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-
-                    this.imageSrc = reader.result as string;
-                    this.myForm.patchValue({
-                        fileSource: reader.result
-                    });
-                };
-            }
-        }
-
-
-        onFileChange(event:MouseEvent) {
-            if (event.target.files && event.target.files[0]) {
-                var reader = new FileReader();
-
-                reader.readAsDataURL(event.target.files[0]); // read file as data url
-
-                reader.onload = (event) => { // called once readAsDataURL is completed
-                    // @ts-ignore
-                    this.imageSrc = event.target.result;
-                }
-            }
-        }
-    */
 
     submit(){
 
-        console.log(this.addBookForm.value);
-        console.log(this.addBookForm.value.bookDesc);
+        //console.log(this.addBookForm.value);
+        //console.log(this.addBookForm.value.bookDesc);
+        let userId = this._userDataService.getUserId();
 
-        const formData = new FormData();
-        formData.append('bookImg', this.bookImageFile, this.bookImageFile.name);
-        formData.append('bookTitle', this.addBookForm.value.bookTitle);
-        formData.append('bookDesc', this.addBookForm.value.bookDesc);
-        formData.append('userId', this.addBookForm.value.userId);
+        if (Number.isInteger(Number(userId))) {
+            const formData = new FormData();
+            formData.append('bookImg', this.bookImageFile, this.bookImageFile.name);
+            formData.append('bookTitle', this.addBookForm.value.bookTitle);
+            formData.append('bookDesc', this.addBookForm.value.bookDesc);
+            formData.append('userId', userId);
 
 
-        console.log(formData);
-        // @ts-ignore
-        for (let [key, value] of formData) {
-            console.log(`${key}: ${value}`)
+            // @ts-ignore
+            /*for (let [key, value] of formData) {
+                console.log(`${key}: ${value}`)
+            }*/
+
+            this._bookService.addBook(formData)
+                .subscribe(
+                    (response: any) => {
+                        //console.log("Success",response);
+
+                        if(response.status === 'success'){
+                            this.resetForm();
+                        }
+
+                        this.status      = response.status;
+                        this.message     = response.message;
+                    },
+                    (error: any) => {
+                        //console.log("Error",error);
+                        this.message = error;
+                        this.status   = 'error';
+                    },
+                );
+        }else{
+            this.message       = 'Cant Identify your user Id';
+            this.status         = 'error';
         }
 
-
-        this._bookService.addBook(formData)
-            .subscribe(
-                (response: any) => console.log("Success",response),
-                (error: any) => {
-                    console.log("Error",error);
-                    this.errorMsg = error
-                },
-            );
-
     }
-
-
 
 }
 

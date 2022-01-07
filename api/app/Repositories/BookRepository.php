@@ -27,13 +27,17 @@ class BookRepository
     }
 
     public function searchBookByTitle($title){
-        return Book::Where('title', 'like', '%' . $title . '%')->get();
+        return Book::whereHas('author', function ($q) use ($title){
+            $q->where('title', 'like', '%' . $title . '%')
+                ->where('users.status',true);
+        })->get();
     }
 
     public function searchBookByAuthorName($name){
 
         return Book::whereHas('author', function ($q) use ($name){
             $q->where('users.role','teacher')
+                ->where('users.status',true)
                 ->Where('users.full_name', 'like', '%' . $name . '%');
         })->get();
     }

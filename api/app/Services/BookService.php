@@ -5,7 +5,6 @@ namespace App\Services;
 
 
 use App\Exceptions\CustomException;
-use App\Repositories\AuthorRepository;
 use App\Repositories\BookRepository;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,12 +23,17 @@ class BookService
         if(!$book){
             throw new CustomException('Book does not exist',404);
         }
-        $url            = URL('/').Storage::url('images/');
+
+
+        $url    = URL('/').Storage::url('');
+        $imgUrl = ($book->image==null)?'':$url.$book->image; 
+
+
         $arr = array(
             'id'            => $book->id,
             'title'         => $book->title,
             'description'   => $book->description,
-            'image'         => $url.$book->image,
+            'image'         => $imgUrl,
             'author'        => $book->author->full_name,
             'posted'        => $book->created_at->diffForHumans(),
         );
@@ -57,15 +61,17 @@ class BookService
 
     private function fillArr($results){
         $arr = [];
-        //$storagePath    = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
-        $url            = URL('/').Storage::url('images/');
+        $url            = URL('/').Storage::url('');
+        
 
         foreach($results as $result){
+            $imgUrl = ($result->image==null)?'':$url.$result->image;
+
             $arr[] = array(
                 'id'            => $result->id,
                 'title'         => $result->title,
                 'description'   => $result->description,
-                'image'         => $url.$result->image,
+                'image'         => $imgUrl,
                 'author'        => $result->author->full_name,
                 'posted'        => $result->created_at->diffForHumans(),
             );
@@ -82,7 +88,7 @@ class BookService
         if($author->count() > 0){
             throw new CustomException('Book name already exist',409);
         }else{
-            $insertedRecord = $this->bookRepository->add($bookArr);
+            $insertedRecord = $this->bookRepository->add($bookArr);            
             if($insertedRecord){
                 return array(
                     'id'            => $insertedRecord->id,

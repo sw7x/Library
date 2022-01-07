@@ -4,43 +4,54 @@
             <div class="col-12">
 
                 <h1 class="lg:text-2xl text-xl font-semibold mb-6">Author List</h1>
-                <table id="example" class="table table-hover responsive nowrap" style="width:100%">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>registered</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let author of authors | paginate: { itemsPerPage: 5, currentPage: page }">
-                            <td>
-                                <a class="text-blue-700 font-semibold" [routerLink]="['/authors', author.id]">{{author.name}}</a>
-                            </td>
-                            <td>{{author.email}}</td>
-                            <td>{{author.phone}}</td>
-                            <td>{{author.registered}}</td>
-                            <td>
+
+                <ng-template [ngIf]="status==='success'" [ngIfElse]="errorMsgTpl">
+                    <div *ngIf="totalRecords > 0">
+                        <table  id="example" class="table table-hover responsive nowrap" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>registered</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let author of authors | paginate: { itemsPerPage: 5, currentPage: page }">
+                                <td>
+                                    <a class="text-blue-700 font-semibold" [routerLink]="['/authors', author.id]">{{author.name}}</a>
+                                </td>
+                                <td>{{author.email}}</td>
+                                <td>{{author.phone}}</td>
+                                <td>{{author.registered}}</td>
+                                <td>
+                                    <ui-switch size="large" (change)="changeStatus($event,author.id)"
+                                           checkedTextColor="blue" labelOn="enable" labelOff="disable"
+                                           [checked]="(author.status=='enabled')?true:false"></ui-switch>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="pagination text-center">
+                            <pagination-controls class="border-2 border-gray-500 mx-auto px-3 py-2 font-semibold text-2xl ngx-pagination" (pageChange)="page = $event"></pagination-controls>
+                        </div>
+                    </div>
+
+                    <div *ngIf="totalRecords <= 0">
+                        <p class="text-danger text-center text-3xl font-semibold">No records</p>
+                    </div>
+                </ng-template>
 
 
-                                <ui-switch size="large" (change)="changeStatus($event,author.id)"
-                                           checkedTextColor="blue"
-                                           labelOn="enable" labelOff="disable" [checked]="(author.status=='enabled')?true:false"></ui-switch>
+                <ng-template #errorMsgTpl>
+                    <div>
+                        <p class="text-danger text-center text-3xl font-semibold">Error</p>
+                        <p class="text-danger text-center text-2xl font-semibold">{{message}}</p>
+                    </div>
+                </ng-template>
 
-
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="pagination text-center">
-                    <pagination-controls class="border-2 border-gray-500 mx-auto px-3 py-2 font-semibold text-2xl ngx-pagination" (pageChange)="page = $event"></pagination-controls>
-                </div>
-
-                <p>{{errorMsg}}</p>
             </div>
         </div>
     </div>

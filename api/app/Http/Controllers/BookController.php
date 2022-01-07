@@ -6,6 +6,7 @@ use App\Exceptions\CustomException;
 use App\Services\BookService;
 use App\Utils\FileUploadUtil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -17,19 +18,8 @@ class BookController extends Controller
 
     public function __construct(BookService $bookService)
     {
-        $this->bookService = $bookService;
-
-        /*
-        $this->middleware('check.admin',
-            ['only' => ['index']]
-        );
-
-        $this->middleware('check.teacher',
-            ['only' => ['store']]
-        );
-
-        */
-
+        $this->bookService = $bookService;        
+        $this->middleware('check.teacher',['only' => ['store']]);
     }
 
 
@@ -49,7 +39,14 @@ class BookController extends Controller
                 }else if(!$title && $authorName){
                     $books = $this->bookService->searchBookByAuthorName($authorName);
                 }else{
-                    $books = $this->bookService->viewAll();
+                    
+                    // only admin able to view all the books                    
+                    if(Auth::guard()->user() && Auth::guard()->user()->role == 'admin'){
+                        $books = $this->bookService->viewAll();
+                    }else{
+                        throw new CustomException('you dont have permissions to view all books',403);
+                    }
+                    
                 }
             }
 
@@ -66,16 +63,18 @@ class BookController extends Controller
             }
 
         }catch(CustomException $exception){
+            $code = $exception->getCode() ?? 500;
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => $exception->getMessage(),
             );
-            return response()->json($response, 500);
+            return response()->json($response, $code);
         }
         catch(\Exception $exception){
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => 'server error',
+                //'message'   => $exception->getMessage(),
             );
             return response()->json($response, 500);
         }
@@ -86,18 +85,19 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
+        
         try{
             $validator = Validator::make($request->all(), [
                 'bookTitle' => 'required',
-                'BookImg'   => 'required|mimes:jpeg,jpg,png,gif,bmp',
-                'user_id'   => 'required',
+                'userId'   => 'required',
             ]);
+
 
             if($validator->fails()){
                 throw new ValidationException($validator);
             }
 
-            $file = $request->file('BookImg');
+            $file = $request->file('bookImg');
 
             if(!isset($file)){  //no image upload
                 throw new CustomException('Book image is not provided',400);
@@ -105,27 +105,27 @@ class BookController extends Controller
                 $fileUploadUtil = new FileUploadUtil();
                 $imgDest        = $fileUploadUtil->upload($file,'books');
             }
-            
+
             $bookRecord = array(
                 'title'         => $request->input('bookTitle'),
                 'description'   => $request->input('bookDesc'),
                 'image'         => $imgDest,
-                'author_id'     => $request->input('user_id'),
+                'author_id'     => $request->input('userId'),
             );
 
             $insertedRecord = $this->bookService->add($bookRecord);
 
             $response = array(
-                'status'    => 'Success',
+                'status'    => 'success',
                 'data'      => $insertedRecord,
-                'message'   => 'category added successfully'
+                'message'   => 'Book added successfully'
             );
 
             return response()->json($response, 201);
 
         }catch (ValidationException $exception) {
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => $exception->getMessage(),
             );
             return response()->json($response, 400);
@@ -133,7 +133,7 @@ class BookController extends Controller
         }catch (CustomException $e) {
 
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => $e->getMessage(),
             );
             $code = $e->getCode() ?? 500;
@@ -144,7 +144,7 @@ class BookController extends Controller
             $message    = $exception->getMessage();
             //$message = 'server error';
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => $message,
             );
             return response()->json($response, 500);
@@ -163,16 +163,17 @@ class BookController extends Controller
             }
 
             $book = $this->bookService->view($id);
+
             if($book){
                 $response = array(
-                    'status'    => 'Success',
+                    'status'    => 'success',
                     'data'      => $book,
                     'message'   => ''
                 );
                 return response()->json($response, 200);
             }else{
                 $response = array(
-                    'status'    => 'Error',
+                    'status'    => 'error',
                     'data'      => null,
                     'message'   => 'Resource does not exist'
                 );
@@ -182,7 +183,7 @@ class BookController extends Controller
         }catch (CustomException $e) {
 
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 'message'   => $e->getMessage(),
             );
             $code = $e->getCode() ?? 500;
@@ -191,7 +192,7 @@ class BookController extends Controller
         catch (\Exception $e) {
 
             $response = array(
-                'status'    => 'Error',
+                'status'    => 'error',
                 //'message'   => 'Internal server error',
                 'message'   => $e->getMessage(),
             );

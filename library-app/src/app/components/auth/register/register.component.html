@@ -2,6 +2,16 @@
     <form class="lg:p-10 p-6 space-y-3 relative bg-white shadow-xl rounded-md uk-form teacher-reg"
           [formGroup]="regForm" (ngSubmit)="submitRegForm()">
 
+        <div *ngIf="status == 'error'">
+            <p class="text-danger text-center text-3xl font-semibold">Error</p>
+            <p class="text-danger text-center text-2xl font-semibold">{{message}}</p>
+        </div>
+
+        <div *ngIf="status == 'success'">
+            <p class="text-success text-center text-3xl font-semibold">Success</p>
+            <p class="text-success text-center text-2xl font-semibold">{{message}}</p>
+        </div>
+
         <h1 class="lg:text-2xl text-xl font-semibold mb-6">Teacher Registration</h1>
 
         <div class="text-base"><span class="font-bold text-red-500 text-lg">*</span> - Required Information </div>
@@ -78,11 +88,9 @@
             </div>
             <div>
                 <button type="reset" class="btn bg-red-600 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"
-                        (click)="resetForm($event)">Clear</button>
+                        (click)="resetForm()">Clear</button>
             </div>
         </div>
 
     </form>
-
-    <p>{{errorMsg}}</p>
 </section>

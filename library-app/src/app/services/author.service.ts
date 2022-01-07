@@ -1,11 +1,11 @@
-
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {IAuthors,IAuthor} from "@interfaces/Author";
 import {environment} from "@environments/environment";
 
 import { Observable, throwError } from 'rxjs';
 import { catchError,  } from 'rxjs/operators';
+import {TokenService} from "@services/token.service";
 
 
 
@@ -14,7 +14,8 @@ import { catchError,  } from 'rxjs/operators';
 })
 export class AuthorService {
 
-    constructor(private _http:HttpClient) { }
+
+    constructor(private _http:HttpClient,private _tokenService: TokenService) { }
 
 
     getAuthorById(authorId: number):Observable<IAuthor> {
@@ -25,26 +26,36 @@ export class AuthorService {
 
 
     getAllAuthors():Observable<IAuthors> {
-        return this._http.get<IAuthors>(environment.apiUrl + '/authors')
+
+        let header = {
+            headers: new HttpHeaders()
+                .set('Authorization',  `Bearer ${this._tokenService.getToken()}`)
+        };
+
+        return this._http.get<IAuthors>(environment.apiUrl + '/authors',header)
             .pipe(catchError(this.errorHandler));
     }
 
 
     changeAuthorStatus(authorId:number,statVal:string):Observable<IAuthor> {
         const body = { status: statVal };
-        return this._http.put<any>(environment.apiUrl + '/authors/'+authorId, body)
-            .pipe(catchError(this.errorHandlerChangeAuthorStatus));
+        let header = {
+            headers: new HttpHeaders()
+                .set('Authorization',  `Bearer ${this._tokenService.getToken()}`)
+        };
+
+        return this._http.put<any>(environment.apiUrl + '/authors/'+authorId, body,header)
+            .pipe(catchError(this.changeAuthorStatus_errorHandler));
     }
 
 
 
-    errorHandlerChangeAuthorStatus(error: HttpErrorResponse) {
-        console.log(error.error.message);
-        return throwError(error.error.message);
+    changeAuthorStatus_errorHandler(error: HttpErrorResponse) {
+        return throwError(error.error.message || "Server error");
         //return throwError("User updated successfully due to Server error");
     }
 
     errorHandler(error: HttpErrorResponse) {
-        return throwError(error.message || "Server error");
+        return throwError(error.error.message || "Server error");
     }
 }

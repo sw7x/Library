@@ -1,26 +1,22 @@
-
-
-
-
 <section>
     <div class="grid lg:grid-cols-3 gap-3 w-3/4 m-auto">
         <div>
-            <button (click)="showMyProfile()"
+            <button routerLink="/admin/my-profile"
                     class="btn bg-gray-500 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"
-                    [ngClass]="profile_btn_status ? 'active' : ''"
+                    [routerLinkActive]="['active']"
             >My profile</button>
         </div>
 
         <div>
-            <button (click)="showAuthors()"
+            <button routerLink="/admin/authors"
                     class="btn bg-gray-400 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"
-                    [ngClass]="authors_btn_status ? 'active' : ''"
+                    [routerLinkActive]="['active']"
             >Authors</button>
         </div>
         <div>
-            <button (click)="showBooks()"
+            <button routerLink="/admin/books"
                     class="btn bg-gray-400 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full"
-                    [ngClass]="books_btn_status ? 'active' : ''"
+                    [routerLinkActive]="['active']"
             >Books</button>
         </div>
 

@@ -9,15 +9,12 @@ import {BookService} from "@services/book.service";
 export class BookListComponent implements OnInit {
 
     public books: any[] = [];
-    public totalRecords:number | undefined;
+    public totalRecords:number = 0;
     public page:number = 1;
-
-
-
 
     public status      : string | undefined;
     public message     : string | undefined;
-    public errorMsg    : string | undefined;
+
 
 
 
@@ -27,34 +24,21 @@ export class BookListComponent implements OnInit {
 
         this._bookService.getAllBooks()
             .subscribe((response: any) => {
-                    console.log(response);
-                    console.log(response.message);
-                    console.log(response.data);
-
-
-
+                    //console.log(response);
+                    //console.log(response.message);
+                    //console.log(response.data);
 
                     if(response.status === 'success'){
                         this.books           = response.data;
                         this.totalRecords    = response.data.length;
-
-
-                    }else{
-
                     }
-
-
                     this.status      = response.status;
                     this.message     = response.message;
-
-
-
-
-
-
-
                 },
-                error => this.errorMsg = error
+                error => {
+                    this.message = error;
+                    this.status   = 'error';
+                }
             );
 
 

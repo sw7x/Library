@@ -12,12 +12,15 @@ export class RegisterComponent implements OnInit {
     public showPw           : boolean = false;
     public showConfirmPw    : boolean = false;
     public regForm!         : FormGroup;
-    public errorMsg         : string | undefined;
+
 
     constructor(private fb:FormBuilder, private _registrationService:RegistrationService ) {
 
     }
 
+
+    public status      : string = '';
+    public message     : string = '';
 
 
 
@@ -68,18 +71,10 @@ export class RegisterComponent implements OnInit {
 
 
     submitRegForm(){
-        console.log(this.regForm.value);
-        console.log(this.regForm.value.email);
+        //console.log(this.regForm.value);
+        //console.log(this.regForm.value.email);
 
-        /*const formData = new FormData();
-
-        formData.append('full_name', this.regForm.value.full_name);
-        formData.append('email', this.regForm.value.email);
-        formData.append('password', this.regForm.value.password);
-        formData.append('confirm_password', this.regForm.value.confirm_password);
-        formData.append('phone', this.regForm.value.phone);*/
-
-
+        /* populate FormData from values from form*/
         const formData = new FormData();
         Object.entries(this.regForm.value).forEach(
             ([key, value]: any[]) => {
@@ -87,31 +82,29 @@ export class RegisterComponent implements OnInit {
             }
         );
 
-
-
-
-        console.log(formData);
+        /* to view FormData -debug purpose */
         // @ts-ignore
-        for (let [key, value] of formData) {
+        /*for (let [key, value] of formData) {
             console.log(`${key}: ${value}`)
-        }
-
+        }*/
 
         this._registrationService.addUser(formData)
             .subscribe(
-                (response: any) => console.log("Success",response),
+                (response: any) => {
+                    //console.log("Success",response)
+                    this.status      = response.status;
+                    this.message     = response.message;
+                    this.resetForm();
+                },
                 (error: any) => {
-                    console.log("Error",error);
-                    this.errorMsg = error
+                    //console.log("Error",error);
+                    this.message = error;
+                    this.status   = 'error';
                 },
             );
-
-
-
-
     }
 
-    resetForm(event:any){
+    resetForm(){
         this.regForm.reset();
     }
 

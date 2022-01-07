@@ -2,8 +2,18 @@
     <form [formGroup]="addBookForm" (ngSubmit)="submit()"
           class="lg:p-10 p-6 space-y-3 relative bg-white shadow-xl rounded-md">
 
-        <h1 class="lg:text-2xl text-xl font-semibold mb-6"> Add Book </h1>
+        <div *ngIf="status == 'error'">
+            <p class="text-danger text-center text-3xl font-semibold">Error</p>
+            <p class="text-danger text-center text-2xl font-semibold">{{message}}</p>
+        </div>
 
+        <div *ngIf="status == 'success'">
+            <p class="text-success text-center text-3xl font-semibold">Success</p>
+            <p class="text-success text-center text-2xl font-semibold">{{message}}</p>
+        </div>
+
+
+        <h1 class="lg:text-2xl text-xl font-semibold mb-6"> Add Book </h1>
         <div class="text-base"><span class="font-bold text-red-500 text-lg">*</span> - Required Information </div>
 
         <div>
@@ -38,10 +48,7 @@
             </div>
         </div>
 
-
         <img [src]="url" width="200" alt=""> <br/>
-
-
 
         <div class="grid lg:grid-cols-2 gap-3">
             <div>
@@ -49,16 +56,9 @@
                         [disabled]="!addBookForm.valid">Submit</button>
             </div>
             <div>
-                <button (click)="resetForm($event)" class="btn bg-red-600 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full">Clear</button>
+                <button (click)="resetForm()" class="btn bg-red-600 font-semibold p-2.5 mt-2 rounded-md text-center text-white w-full">Clear</button>
             </div>
         </div>
 
-        <input type="hidden" formControlName="userId"/>
-
-
     </form>
-
-
-
-    <p>{{errorMsg}}</p>
 </section>
